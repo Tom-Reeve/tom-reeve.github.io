@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<HTML>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Activity Based Costing</title>
+    </head>
+    <body>
+        <div id="full-page-container">
+            <div id="production-table-wrapper">
+                <table id="production-table">
+                    <tr>
+                        <th class="production-table-column-header table-header">Production Data</th>
+                        <th class="production-table-column-header">Multiply By Units</th>
+                        <th class="production-table-column-header"><input class="production-table-project-name" value="Project A"></th>
+                        <th class="production-table-column-header"><input class="production-table-project-name" value="Project B"></th>
+                    </tr>
+                    <tr>
+                        <td class="production-table-row-header">Units</td>
+                        <td class="production-table-cell"><input type="checkbox" class="production-table-checkbox" disabled></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td class="production-table-row-header">Direct Materials</td>
+                        <td class="production-table-cell"><input type="checkbox" class="production-table-checkbox" disabled></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td class="production-table-row-header">Direct Labour Rate</td>
+                        <td class="production-table-cell"><input type="checkbox" class="production-table-checkbox" disabled></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                    </tr>
+                    <tr>
+                        <td class="production-table-row-header">Direct Labour Hours</td>
+                        <td class="production-table-cell"><input type="checkbox" class="production-table-checkbox" disabled></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                        <td class="production-table-cell"><input type="number" class="production-table-input" value="0"></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="production-table-button-container">
+                <button class="production-table-button" onclick="AddColumn()">Add Column</button>
+                <button class="production-table-button" onclick="RemoveColumn()">Remove Column</button>
+                <button class="production-table-button" onclick="Reset(0)">Reset</button>
+                <button class="production-table-button" onclick="AddRow(0)">Add Row</button>
+                <button class="production-table-button" onclick="RemoveRow(0)">Remove Row</button>
+            </div>
+            <div id="cost-pool-table-wrapper">
+                <table id="cost-pool-table">
+                    <tr>
+                        <th>Overhead Cost Pool</th>
+                        <th>Annual Cost</th>
+                        <th>Cost Driver</th>
+                        <th>Cost Driver Units</th>
+                        <th>Cost Per Driver Unit</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="cost-pool-table-button-container">
+                <button class="cost-pool-table-button" onclick="AddRow(1)">Add Row</button>
+                <button class="cost-pool-table-button" onclick="RemoveRow(1)">Remove Row</button>
+                <button class="cost-pool-table-button" onclick="Reset(1)">Reset</button>
+                <button class="cost-pool-table-button" onclick="UpdateDropdown()">Update</button>
+                <button class="cost-pool-table-button" onclick="Calculate()">Calculate</button>
+            </div>
+            <div id="answer-table-wrapper">
+                <table id="answer-table">
+                    <tr>
+                        <th>Overhead</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="OAR-dropdown-wrapper">
+                <label for="OAR-dropdown">Choose OAR Basis:</label>
+                <select name="OAR-dropdown" id="OAR-dropdown">
+                </select>
+            </div>
+            <div id="OAR-answer-div">
+            </div>
+        </div>
+        
+        <script src="script.js"></script>
+    </body>
+</HTML>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
