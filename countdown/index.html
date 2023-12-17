@@ -1,0 +1,378 @@
+<!DOCTYPE HTML>
+<HTML>
+    <head>
+        <style>
+            .countdown-wrapper {
+                width: 100%;
+                height: 50px;
+                
+                position: relative;
+                margin-bottom: 30px;
+                
+                background-color: #C8C8C8;
+            }
+            .last {
+                margin-bottom: 0px
+            }
+            .progress-bar {
+                width: 1%;
+                height: 50px;
+                
+                position: absolute;
+                
+                background-color: orange;
+            }
+            .countdown-info { 
+                width: 100%;
+                height: 100%;
+                
+                position: absolute;
+                
+                text-align: center;
+                line-height: 50px;
+            }
+            .countdown-text, .countdown-seconds, .countdown-percent, .countdown-days {
+                float: left;
+                
+                width: calc(100% / 3);
+                height: 100%;
+                
+                font-size: 1.5em;
+            }
+        </style>
+        <title>Countdown (1)</title>
+    </head>
+    <body>
+        <div class="countdown-wrapper">
+            <div id="minute-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Minute</div>
+                <div class="countdown-seconds"><span id="minute-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="minute-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="hour-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Hour</div>
+                <div class="countdown-seconds"><span id="hour-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="hour-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="day-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Day</div>
+                <div class="countdown-seconds"><span id="day-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="day-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="week-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Week</div>
+                <div class="countdown-seconds"><span id="week-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="week-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="month-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Month</div>
+                <div class="countdown-seconds"><span id="month-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="month-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="year-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Year</div>
+                <div class="countdown-seconds"><span id="year-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="year-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="decade-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Decade</div>
+                <div class="countdown-seconds"><span id="decade-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="decade-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="century-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Century</div>
+                <div class="countdown-seconds"><span id="century-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="century-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="millennium-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Millennium</div>
+                <div class="countdown-seconds"><span id="millennium-seconds-span">0</span> seconds</div>
+                <div class="countdown-percent"><span id="millennium-percent-span">0</span>%</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="birthday-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Birthday</div>
+                <div class="countdown-seconds"><span id="birthday-seconds-span">0</span> seconds</div>
+                <div class="countdown-days"><span id="birthday-days-span">0</span> days</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper">
+            <div id="halloween-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Halloween</div>
+                <div class="countdown-seconds"><span id="halloween-seconds-span">0</span> seconds</div>
+                <div class="countdown-days"><span id="halloween-days-span">0</span> days</div>
+            </div>
+        </div>
+        <div class="countdown-wrapper last">
+            <div id="christmas-progress-bar" class="progress-bar"></div>
+            <div class="countdown-info">
+                <div class="countdown-text">Next Christmas</div>
+                <div class="countdown-seconds"><span id="christmas-seconds-span">0</span> seconds</div>
+                <div class="countdown-days"><span id="christmas-days-span">0</span> days</div>
+            </div>
+        </div>
+        <script>
+            function AddCommas(number) {
+                return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+            }
+            
+            function MinuteCountdown() {
+                let time = new Date();
+                
+                let next_minute = new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours(), time.getMinutes() + 1, 0);
+                let time_to_next = next_minute - time;
+                let minute_percent = 100 - ((time_to_next / (60 * 1000)) * 100)
+                document.getElementById("minute-percent-span").innerHTML = minute_percent.toFixed(2);
+                
+                let progress_bar = document.getElementById("minute-progress-bar")
+                progress_bar.style.width = minute_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("minute-seconds-span").innerHTML = seconds_remaining;
+            }
+            setInterval(MinuteCountdown, 1);
+            
+            function HourCountdown() {
+                let time = new Date();
+                
+                let next_hour = new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours() + 1, 0, 0, 0);
+                let time_to_next = next_hour - time;
+                let hour_percent = 100 - ((time_to_next / (60 * 60 * 1000)) * 100);
+                document.getElementById("hour-percent-span").innerHTML = hour_percent.toFixed(2);
+                
+                let progress_bar = document.getElementById("hour-progress-bar")
+                progress_bar.style.width = hour_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("hour-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(HourCountdown, 1);
+            
+            function DayCountdown() {
+                let time = new Date();
+                
+                let next_day = new Date(time.getFullYear(), time.getMonth(), time.getDate() + 1, 0, 0, 0, 0);
+                let time_to_next = next_day - time;
+                let day_percent = 100 - ((time_to_next / (60 * 60 * 24 * 1000)) * 100);
+                document.getElementById("day-percent-span").innerHTML = day_percent.toFixed(3);
+                
+                let progress_bar = document.getElementById("day-progress-bar")
+                progress_bar.style.width = day_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("day-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(DayCountdown, 1);
+            
+            function WeekCountdown() {
+                let time = new Date();
+                
+                let next_week = new Date();
+                next_week.setDate(next_week.getDate() + (((1 + 7 - next_week.getDay()) % 7) || 7));
+                next_week.setHours(0, 0, 0, 0);
+                let time_to_next = next_week - time;
+                let week_percent = 100 - ((time_to_next / (60 * 60 * 24 * 7 * 1000)) * 100);
+                document.getElementById("week-percent-span").innerHTML = week_percent.toFixed(4);
+                
+                let progress_bar = document.getElementById("week-progress-bar")
+                progress_bar.style.width = week_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("week-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(WeekCountdown, 1);
+            
+            function MonthCountdown() {
+                let time = new Date();
+                
+                let next_month = new Date(time.getFullYear(), time.getMonth() + 1, 1, 0, 0, 0, 0);
+                let time_to_next = next_month - time;
+                let days_this_month = new Date(time.getFullYear(), time.getMonth() + 1, 0, 0, 0, 0, 0).getDate();
+                let month_percent = 100 - ((time_to_next / (60 * 60 * 24 * days_this_month * 1000)) * 100);
+                document.getElementById("month-percent-span").innerHTML = month_percent.toFixed(5);
+                
+                let progress_bar = document.getElementById("month-progress-bar")
+                progress_bar.style.width = month_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("month-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(MonthCountdown, 1);
+            
+            function YearCountdown() {
+                let time = new Date();
+                
+                let next_year = new Date(time.getFullYear() + 1, 0, 1, 0, 0, 0, 0);
+                let year = time.getFullYear();
+                let days_this_year = ((year % 4 === 0 && year % 100 > 0) || year % 400 === 0) ? 366 : 365;
+                let time_to_next = next_year - time;
+                let year_percent = 100 - ((time_to_next / (60 * 60 * 24 * days_this_year * 1000)) * 100);
+                document.getElementById("year-percent-span").innerHTML = year_percent.toFixed(6);
+                
+                let progress_bar = document.getElementById("year-progress-bar")
+                progress_bar.style.width = year_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("year-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(YearCountdown, 1);
+            
+            function DecadeCountdown() {
+                let time = new Date();
+                
+                let current_year = time.getFullYear(); //next multiple of 10 year (2030);
+                let next_decade = Math.ceil(current_year / 10) * 10;
+                next_decade = next_decade === current_year ? current_year + 10 : next_decade;
+                let next_decade_date = new Date(next_decade, 0, 1, 0, 0, 0, 0);
+                let time_to_next = next_decade_date - time;
+                let days_this_decade = (365 * 8) + (366 * 2) //estimate;
+                let decade_percent = 100 - ((time_to_next / (60 * 60 * 24 * days_this_decade * 1000)) * 100);
+                document.getElementById("decade-percent-span").innerHTML = decade_percent.toFixed(7);
+                
+                let progress_bar = document.getElementById("decade-progress-bar")
+                progress_bar.style.width = decade_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("decade-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(DecadeCountdown, 1);
+            
+            function CenturyCountdown() {
+                let time = new Date();
+                
+                let current_year = time.getFullYear();
+                let next_century = Math.ceil(current_year / 100) * 100;
+                next_century = next_century === current_year ? current_year + 100 : next_century;
+                let next_century_date = new Date(next_century, 0, 1, 0, 0, 0, 0);
+                let time_to_next = next_century_date - time;
+                let days_this_century = (365 * 75) + (366 * 25) //estimate;
+                let century_percent = 100 - ((time_to_next / (60 * 60 * 24 * days_this_century * 1000)) * 100);
+                document.getElementById("century-percent-span").innerHTML = century_percent.toFixed(8);
+                
+                let progress_bar = document.getElementById("century-progress-bar")
+                progress_bar.style.width = century_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("century-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(CenturyCountdown, 1);
+            
+            function MillenniumCountdown() {
+                let time = new Date();
+                
+                let current_year = time.getFullYear();
+                let next_millennium = Math.ceil(current_year / 1000) * 1000;
+                next_millennium = next_millennium === current_year ? current_year + 1000 : next_millennium;
+                let next_millennium_date = new Date(next_millennium, 0, 1, 0, 0, 0, 0);
+                let time_to_next = next_millennium_date - time;
+                let days_this_millennium = (365 * 750) + (366 * 250) //estimate;
+                let millennium_percent = 100 - ((time_to_next / (60 * 60 * 24 * days_this_millennium * 1000)) * 100);
+                document.getElementById("millennium-percent-span").innerHTML = millennium_percent.toFixed(9);
+                
+                let progress_bar = document.getElementById("millennium-progress-bar")
+                progress_bar.style.width = millennium_percent + "%";
+                
+                let seconds_remaining = Math.ceil(time_to_next / 1000);
+                document.getElementById("millennium-seconds-span").innerHTML = AddCommas(seconds_remaining);
+            }
+            setInterval(MillenniumCountdown, 1);
+            
+            function EventCountdown(day, month) {
+                let time = new Date();
+                
+                let current_year = time.getFullYear();
+                let event = new Date(current_year, month - 1, day, 0, 0, 0, 0);
+                let time_to_next = event - time;
+                if (time_to_next < 0) {
+                    time_to_next = new Date(current_year + 1, month - 1, day, 0, 0, 0, 0) - time;
+                }
+                let percent = 100 - ((time_to_next / (60 * 60 * 24 * 365 * 1000)) * 100);
+                let seconds_remaining = AddCommas(Math.ceil(time_to_next / 1000));
+                let days_remaining = AddCommas((time_to_next / 1000 / 60 / 60 / 24).toFixed(5));
+                
+                return [percent, seconds_remaining, days_remaining];
+            }
+            
+            function YearlyEvents() {
+                let birthday = EventCountdown(17, 2);
+                document.getElementById("birthday-progress-bar").style.width = birthday[0] + "%";
+                document.getElementById("birthday-seconds-span").innerHTML = birthday[1];
+                document.getElementById("birthday-days-span").innerHTML = birthday[2];
+                
+                let halloween = EventCountdown(31, 10);
+                document.getElementById("halloween-progress-bar").style.width = halloween[0] + "%";
+                document.getElementById("halloween-seconds-span").innerHTML = halloween[1];
+                document.getElementById("halloween-days-span").innerHTML = halloween[2];
+                
+                let christmas = EventCountdown(25, 12);
+                document.getElementById("christmas-progress-bar").style.width = christmas[0] + "%";
+                document.getElementById("christmas-seconds-span").innerHTML = christmas[1];
+                document.getElementById("christmas-days-span").innerHTML = christmas[2];
+            }
+            setInterval(YearlyEvents, 1);
+        </script>
+    </body>
+</HTML>
+
+<!--
+To Do
+
+- Add Dates That Are Being Counted Down To
+- Resize To Less Than Full Width
+- Fix Daylight Savings Issues
+- Change Title
+- Customisable Birthday Date
+
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
