@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #title {
+                font-size: 100px;
+                text-align: center;
+            }
+            #input_container {
+                width: 100%;
+                text-align: center;
+            }
+            #states_dropdown {
+                text-align: center;
+            }
+            #restart_button_wrapper {
+                width: 100%;
+                margin-top: 15px;
+                text-align: center;
+                z-index: 2;
+            }
+            #results_table_wrapper {
+                width: 100%;
+            }
+            #results_table {
+                width: 95%;
+                border-collapse: separate;
+                border-spacing: 0 1em;
+                text-align: center;
+            }
+            #canvas {
+                position: absolute;
+                z-index: 1;
+                width: 98%;
+                height: 75%;
+                margin-top: 175px;
+            }
+        </style>
+        <title>Guess the US State</title>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <div id="title">Guess The US State</div>
+        <div id="input_container">
+            <select name="states_dropdown" id="states_dropdown" onchange="SubmitGuess()"> 
+                <option value="" selected disabled hidden>Choose a State</option>
+                <option value="Alabama">Alabama</option>
+                <option value="Alaska">Alaska</option>
+                <option value="Arizona">Arizona</option>
+                <option value="Arkansas">Arkansas</option>
+                <option value="California">California</option>
+                <option value="Colorado">Colorado</option>
+                <option value="Connecticut">Connecticut</option>
+                <option value="Delaware">Delaware</option>
+                <option value="Florida">Florida</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Hawaii">Hawaii</option>
+                <option value="Idaho">Idaho</option>
+                <option value="Illinois">Illinois</option>
+                <option value="Indiana">Indiana</option>
+                <option value="Iowa">Iowa</option>
+                <option value="Kansas">Kansas</option>
+                <option value="Kentucky">Kentucky</option>
+                <option value="Louisiana">Louisiana</option>
+                <option value="Maine">Maine</option>
+                <option value="Maryland">Maryland</option>
+                <option value="Massachusetts">Massachusetts</option>
+                <option value="Michigan">Michigan</option>
+                <option value="Minnesota">Minnesota</option>
+                <option value="Mississippi">Mississppi</option>
+                <option value="Missouri">Missouri</option>
+                <option value="Montana">Montana</option>
+                <option value="Nebraska">Nebraska</option>
+                <option value="Nevada">Nevada</option>
+                <option value="New Hampshire">New Hampshire</option>
+                <option value="New Jersey">New Jersey</option>
+                <option value="New Mexico">New Mexico</option>
+                <option value="New York">New York</option>
+                <option value="North Carolina">North Carolina</option>
+                <option value="North Dakota">North Dakota</option>
+                <option value="Ohio">Ohio</option>
+                <option value="Oklahoma">Oklahoma</option>
+                <option value="Oregon">Oregon</option>
+                <option value="Pennsylvania">Pennsylvania</option>
+                <option value="Rhode Island">Rhode Island</option>
+                <option value="South Carolina">South Carolina</option>
+                <option value="South Dakota">South Dakota</option>
+                <option value="Tennessee">Tennessee</option>
+                <option value="Texas">Texas</option>
+                <option value="Utah">Utah</option>
+                <option value="Vermont">Vermont</option>
+                <option value="Virginia">Virginia</option>
+                <option value="Washington">Washington</option>
+                <option value="West Virginia">West Virginia</option>
+                <option value="Wisconsin">Wisconsin</option>
+                <option value="Wyoming">Wyoming</option>
+            </select>
+        </div>
+        <div id="restart_button_wrapper">
+            <button id="restart_button" onclick="Init()">Restart</button>
+        </div>
+        <div id="results_table_wrapper">
+            <table id="results_table">
+                <tr>
+                    <th>Guess Number</th>
+                    <th>Guess</th>
+                    <th>Distance (km)</th>
+                    <th>Direction</th>
+                </tr>
+            </table>
+        </div>
+        <script>
+            let states = {                      //https://inkplant.com/code/state-latitudes-longitudes
+                Alabama: {
+                    latitude: 32.806671,        //longitudes and latitudes of all US states
+                    longitude: -86.791130
+                },
+                Alaska: {
+                    latitude: 61.370716,
+                    longitude: -152.404419
+                },
+                Arizona: {
+                    latitude: 33.729759,
+                    longitude: -111.431221
+                },
+                Arkansas: {
+                    latitude: 34.969704,
+                    longitude: -92.373123
+                },
+                California: {
+                    latitude: 36.116203,
+                    longitude: -119.681564
+                },
+                Colorado: {
+                    latitude: 39.059811,
+                    longitude: -105.311104
+                },
+                Connecticut: {
+                    latitude: 41.597782,
+                    longitude: -72.755371
+                },
+                Delaware: {
+                    latitude: 39.318523,
+                    longitude: -75.507141
+                },
+                Florida: {
+                    latitude: 27.766279,
+                    longitude: -81.686783
+                },
+                Georgia: {
+                    latitude: 33.040619,
+                    longitude: -83.643074
+                },
+                Hawaii: {
+                    latitude: 21.094318,
+                    longitude: -157.498337
+                },
+                Idaho: {
+                    latitude: 44.240459,
+                    longitude: -114.478828
+                },
+                Illinois: {
+                    latitude: 40.349457,
+                    longitude: -88.986137
+                },
+                Indiana: {
+                    latitude: 39.849426,
+                    longitude: -86.258278
+                },
+                Iowa: {
+                    latitude: 42.011539,
+                    longitude: -93.210526,
+                },
+                Kansas: {
+                    latitude: 38.526600,
+                    longitude: -96.726486
+                },
+                Kentucky: {
+                    latitude: 37.668140,
+                    longitude: -84.670067
+                },
+                Louisiana: {
+                    latitude: 31.169546,
+                    longitude: -91.867805
+                },
+                Maine: {
+                    latitude: 44.693947,
+                    longitude: -69.381927
+                },
+                Maryland: {
+                    latitude: 39.063946,
+                    longitude: -76.802101
+                },
+                Massachusetts: {
+                    latitude: 42.230171,
+                    longitude: -71.530106
+                },
+                Michigan: {
+                    latitude: 43.326618,
+                    longitude: -84.536095
+                },
+                Minnesota: {
+                    latitude: 45.694454,
+                    longitude: -93.900192
+                },
+                Mississippi: {
+                    latitude: 32.741646,
+                    longitude: -89.678696
+                },
+                Missouri: {
+                    latitude: 38.456085,
+                    longitude: -92.288368
+                },
+                Montana: {
+                    latitude: 46.921925,
+                    longitude: -110.454353
+                },
+                Nebraska: {
+                    latitude: 41.125370,
+                    longitude: -98.268082
+                },
+                Nevada: {
+                    latitude: 38.313515,
+                    longitude: -117.055371
+                },
+                New_Hampshire: {
+                    latitude: 43.452492,
+                    longitude: -71.563896
+                },
+                New_Jersey: {
+                    latitude: 40.298904,
+                    longitude: -74.521011
+                },
+                New_Mexico: {
+                    latitude: 34.840515,
+                    longitude: -106.248482
+                },
+                New_York: {
+                    latitude: 42.165726,
+                    longitude: -74.948051
+                },
+                North_Carolina: {
+                    latitude: 35.630066,
+                    longitude: -79.806419
+                },
+                North_Dakota: {
+                    latitude: 47.528912,
+                    longitude: -99.784012
+                },
+                Ohio: {
+                    latitude: 40.388783,
+                    longitude: -82.764915
+                },
+                Oklahoma: {
+                    latitude: 35.565342,
+                    longitude: -96.928917
+                },
+                Oregon: {
+                    latitude: 44.572021,
+                    longitude: -122.070938
+                },
+                Pennsylvania: {
+                    latitude: 40.590752,
+                    longitude: -77.209755
+                },
+                Rhode_Island: {
+                    latitude: 41.680892,
+                    longitude: -71.511780
+                },
+                South_Carolina: {
+                    latitude: 33.856892,
+                    longitude: -80.945007
+                },
+                South_Dakota: {
+                    latitude: 44.299782,
+                    longitude: -99.438828
+                },
+                Tennessee: {
+                    latitude: 35.747845,
+                    longitude: -86.692345
+                },
+                Texas: {
+                    latitude: 31.054487,
+                    longitude: -97.563461
+                },
+                Utah: {
+                    latitude: 40.150032,
+                    longitude: -111.862434
+                },
+                Vermont: {
+                    latitude: 44.045876,
+                    longitude: -72.710686
+                },
+                Virginia: {
+                    latitude: 37.769337,
+                    longitude: -78.169968
+                },
+                Washington: {
+                    latitude: 47.400902,
+                    longitude: -121.490494
+                },
+                West_Virginia: {
+                    latitude: 38.491226,
+                    longitude: -80.954453
+                },
+                Wisconsin: {
+                    latitude: 44.268543,
+                    longitude: -89.616508
+                },
+                Wyoming: {
+                    latitude: 42.755966,
+                    longitude: -107.302490
+                }
+            }
+            
+            let state_to_guess, state_latitude, state_longitude;        //initating random state variables
+            let guessed_state, guess_number, distance_from_answer, bearing_from_answer, guessed_latitude, guessed_longitude;            //initiating user guess variables
+            
+            let canvas = document.getElementById("canvas");
+            let ctx = canvas.getContext("2d");
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            let particles = []; 
+            let max_particles = 1000;
+            let angle = 0;
+            let interval = 0;
+            
+            let audio = new Audio("Success Trumpet.mp3"); 
+            
+            let dropdown = document.getElementById("states_dropdown");
+            let restart_button = document.getElementById("restart_button");
+            let results_table = document.getElementById("results_table");
+            
+            let state_key_list = Object.keys(states); //list of keys of the states object
+            
+            function Init() {
+                guess_number = 0;
+                
+                audio.pause();
+                audio.currentTime = 0;
+                
+                dropdown.value = "";
+                dropdown.disabled = false;                      //makes sure all dropdowns can be selected
+                for (let i = 1 ; i < dropdown.length ; i++) {
+                    dropdown[i].disabled = false;
+                }
+                
+                restart_button.style.visibility = "hidden";
+                
+                let table_header_row = 1;
+                let table_row_count = results_table.rows.length;
+                for (let i = table_header_row ; i < table_row_count ; i++) {
+                    results_table.deleteRow(table_header_row);                  //deletes all rows of the table from the previous game
+                }
+                
+                let random_index = Math.floor(Math.random() * state_key_list.length); //generates a random number
+                state_to_guess = state_key_list[random_index];                        //uses the random number to generate a random state
+                state_latitude = states[state_key_list[random_index]].latitude;       //gets the latitude of the random state
+                state_longitude = states[state_key_list[random_index]].longitude;     //gets the longitude of the random state
+                
+                ConfettiSetup();
+            }
+            Init();
+            
+            function SubmitGuess() {
+                guessed_state = dropdown.value;
+                guessed_state = guessed_state.replace(" " , "_"); //replaces spaces in state names with underscores, to match how they are defined in the key
+                
+                let guessed_index = state_key_list.indexOf(guessed_state); 
+                dropdown[guessed_index + 1].disabled = true;                    //disables the chosen option to stop it being chosen again
+                
+                guessed_latitude = states[state_key_list[guessed_index]].latitude; //latitude and longitude of the state that has been guessed
+                guessed_longitude = states[state_key_list[guessed_index]].longitude;
+                
+                distance_from_answer = LatitudeLongitudeDistance(guessed_latitude, guessed_longitude, state_latitude, state_longitude);         //gets the distance and bearing from the guessed state to the answer state
+                bearing_from_answer = LatitudeLongitudeBearing(guessed_latitude, guessed_longitude, state_latitude, state_longitude);
+                
+                UpdateScreen()
+            }
+            
+            function UpdateScreen() {
+                guess_number += 1;  //increases the number of guesses
+                
+                guessed_state = guessed_state.replace("_" , " "); //replaces underscores in state names with spaces so they are human readable again
+                
+                let new_table_row = results_table.insertRow();
+                let new_cell_guess_number = new_table_row.insertCell(0);
+                let new_cell_guessed_state = new_table_row.insertCell(1);
+                let new_cell_distance_from_answer = new_table_row.insertCell(2);
+                let new_cell_bearing_from_answer = new_table_row.insertCell(3); //inserts a new row and four new columns
+                
+                new_cell_guess_number.innerHTML = guess_number;
+                new_cell_guessed_state.innerHTML = guessed_state;       //fills the new table row with data
+                new_cell_distance_from_answer.innerHTML = distance_from_answer;
+                new_cell_bearing_from_answer.innerHTML = "⬆️";
+                new_cell_bearing_from_answer.style.transform = "rotate(" + bearing_from_answer + "deg)"; //rotates the emoji towards the bearing of the answer state
+                
+                if (distance_from_answer == 0) {
+                    dropdown.disabled = true;
+                    new_cell_bearing_from_answer.innerHTML = "✅"; //if the answer is correct, the arrow is repalced with a tick and the default bearing is 0
+                    restart_button.style.visibility = "visible";
+                    StartConfetti();
+                    audio.play();
+                }
+            }
+            
+            function DegreeToRadian(degrees) {
+                return degrees * (Math.PI / 180);
+            }
+            
+            function RadianToDegree(radians) {
+                return radians * (180 / Math.PI);
+            }
+            
+            function LatitudeLongitudeDistance(latitude_1, longitude_1, latitude_2, longitude_2) { //gets the distance from the latitude and longitude
+                let latitude_difference = DegreeToRadian(latitude_2 - latitude_1);
+                let longitude_difference = DegreeToRadian(longitude_2 - longitude_1);
+                
+                let calculation_part_1 = 
+                    Math.sin(latitude_difference / 2) * Math.sin(latitude_difference / 2) +
+                    Math.cos(DegreeToRadian(latitude_1)) * Math.cos(DegreeToRadian(latitude_2)) *
+                    Math.sin(longitude_difference / 2) * Math.sin(longitude_difference / 2);
+                let calculation_part_2 = 
+                    2 * Math.atan2(Math.sqrt(calculation_part_1), Math.sqrt(1 - calculation_part_1));
+                
+                let distance = Math.round(calculation_part_2 * 6371);
+                return distance;
+            }
+            
+            function LatitudeLongitudeBearing(latitude_1, longitude_1, latitude_2, longitude_2) { //gets the bearing from the latitude and longitude
+                latitude_1 = DegreeToRadian(latitude_1);
+                longitude_1 = DegreeToRadian(longitude_1);
+                latitude_2 = DegreeToRadian(latitude_2);
+                longitude_2 = DegreeToRadian(longitude_2);
+                
+                let x = 
+                    Math.cos(latitude_1) * Math.sin(latitude_2) -
+                    Math.sin(latitude_1) * Math.cos(latitude_2) * Math.cos(longitude_2 - longitude_1);
+                let y =
+                    Math.sin(longitude_2 - longitude_1) * Math.cos(latitude_2);
+                
+                let bearing = Math.atan2(y, x);
+                bearing = RadianToDegree(bearing);
+                bearing = Math.ceil(bearing / 45) * 45;
+                bearing = (bearing + 360) % 360;
+                return bearing;
+            }
+            
+            function ConfettiSetup() { //https://stackoverflow.com/questions/33629579/javascript-confetti-blast-effect
+                for (let i = 0 ; i < max_particles ; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        r: Math.random() * 8 + 1,
+                        d: Math.random() * max_particles * 15,
+                        c: "rgb(" + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ", " + Math.floor((Math.random() * 255)) + ", 0.8)",
+                        t: Math.floor(Math.random() * 5) - 5
+                    });
+                }
+                clearInterval(interval);
+                ctx.clearRect(0, 0, width, height);
+            }
+            
+            function Draw() {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0 ; i < max_particles ; i++) {
+                    let p = particles[i];
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.c;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x + p.t + p.r / 2, p.y + p.t);
+                    ctx.stroke();
+                }
+                Update();
+            }
+            
+            function Update() {
+                angle += 0.01;
+                for (let i = 0 ; i < max_particles ; i++) {
+                    let p = particles[i];
+                    p.y += Math.cos(angle + p.d) + 1 + p.r / 2;
+                    p.x += Math.sin(angle) * 2;
+                    if (p.x > width + 5 || p.x < -5 || p.y > height) {
+                        if (i % 3 > 0) {
+                            particles[i] = {
+                                x: Math.random() * width,
+                                y: -10,
+                                r: p.r,
+                                d: p.d,
+                                c: p.c,
+                                t: p.t
+                            };
+                        }
+                    }
+                }
+            }
+            
+            function StartConfetti() {
+                interval = setInterval(Draw, 20);
+            }
+        </script>
+    </body>
+</html>
