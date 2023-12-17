@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="Times Tables Game.css">
+        <title>Times Tables Game</title>
+    </head>
+    <body>
+        <div id="title_wrapper">
+            <div id="title_div">Times Tables Game</div>
+        </div>
+        <div id="menu_wrapper">
+            <div id="menu_div">
+                <div id="menu_basic">
+                    <div id="menu_text">Menu</div>
+                </div>
+                <div id="menu_hover">
+                    <div id="game_button_div" class="menu_button_div">
+                        <button id="game_page_button" class="page_button" onclick="OpenPage('0')">Game</button>
+                    </div>
+                    <div id="stats_button_div" class="menu_button_div">
+                    <button id="stats_page_button" class="page_button" onclick="OpenPage('1')">Stats</button>
+                    </div>
+                    <div id="settings_button_div" class="menu_button_div">
+                        <button id="settings_page_button" class="page_button" onclick="OpenPage('2')">Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="page_container">
+            <div id="game_page" class="page">
+                <div id="score_wrapper">
+                    <div id="score_div">Your Score Is: <span id="score">0</span></div>
+                </div>
+                <div id="question_wrapper">
+                    <div id="question_div">
+                        <div id="first_number" class="question">Click</div>
+                        <div id="operator" class="question">&times;</div>
+                        <div id="second_number" class="question">Start</div>
+                        <div id="equals" class="question">=</div>
+                    </div>
+                </div>
+                <div id="answer_wrapper">
+                    <input type="number" id="answer_input">
+                </div>
+                <div id="button_wrapper">
+                    <button id="start" class="control_button" onclick="Start()">Start</button>     
+                    <div class="divider"></div>
+                    <button id="stop" class="control_button" disabled onclick="Stop()">Stop</button>
+                </div>
+                <div id="countdown_wrapper">
+                    <div id="countdown">There Are <span id="seconds_remaining">0</span> Seconds Remaining</div>
+                </div>
+            </div>
+            <div id="stats_page" class="page">
+                <table id="stats_table">
+                    <tr>
+                        <th>Date</th>
+                        <th>Score</th>
+                        <th>Operations</th>
+                        <th>Min Used</th>
+                        <th>Max Used</th>
+                    </tr>
+                </table>
+            </div>
+            <div id="settings_page" class="page">
+                <div id="choose_min_wrapper" class="choose_value">
+                    <label for="min_number">Choose Min Value</label>
+                    <input type="number" id="min_number" value="1">
+                    <button id="min_number_submit" onclick="ChangeMin()">Submit</button>
+                </div>
+                <div id="choose_max_wrapper" class="choose_value">
+                    <label for="max_number">Choose Max Value</label>
+                    <input type="number" id="max_number" value="12">
+                    <button id="max_number_submit" onclick="ChangeMax()">Submit</button>
+                </div>
+                <hr>
+                <div id="choose_included_wrapper">
+                    <label for="plus">+</label>
+                    <input type="checkbox" id="plus" checked name="plus" value="plus" class="checkbox"><br>
+                    <label for="minus">-</label>
+                    <input type="checkbox" id="minus" checked name="minus" value="minus" class="checkbox"><br>
+                    <label for="times">&times;</label>
+                    <input type="checkbox" id="times" checked name="times" value="times" class="checkbox"><br>
+                    <label for="divide">&divide;</label>
+                    <input type="checkbox" id="divide" checked name="divide" value="divide" class="checkbox"><br>
+                </div>
+            </div>
+        </div>
+        <script src="Times Tables Game.js"></script>
+    </body>
+</html>
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
+                                          
