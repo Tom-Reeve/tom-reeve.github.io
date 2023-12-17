@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            #UK_info, #US_info {
+                display: inline-block;
+                width: 49%;
+                text-align: center;
+            }
+            #UK_title, #US_title {
+                text-align: center;
+                font-weight: bold;
+            }
+            #input_full_wrapper {
+                width: 100%;
+                text-align: center;
+            }
+            #income_input {
+                width: 75%;
+                margin-bottom: 5px;
+                text-align: center;
+            }
+            #summary_container {
+                width: 100%;
+                text-align: center;
+                margin-top: 25px;
+            }
+        </style>
+        <title>Tax Calculator</title>
+    </head>
+    <body>
+        <div id="input_full_wrapper">
+            <div id="input_container">
+                <input type="number" id="income_input">
+            </div>
+            <div id="submit_button_container">
+                <button id="submit_button" onclick="CalculateTax()">Submit</button>
+            </div>
+        </div>
+        <div id="UK_info">
+            <div id="UK_title">UK Tax System</div>
+            <div id="tax_container_UK">
+                <div id="tax_container_div_UK">You Pay £<span id="tax_span_UK">0</span> in Tax</div>
+            </div>
+            <div id="average_tax_container_UK">
+                <div id="average_tax_div_UK">Your Average Tax Rate Is <span id="average_tax_span_UK">0</span>%</div>
+            </div>
+            <div id="marginal_tax_container_UK">
+                <div id="marginal_tax_div_UK">Your Marginal Tax Rate Is <span id="marginal_tax_span_UK">0</span>%</div>
+            </div>
+        </div>
+        <div id="US_info">
+            <div id="US_title">US Tax System</div>
+            <div id="tax_container_US">
+                <div id="tax_container_div_US">You Pay £<span id="tax_span_US">0</span> in Tax</div>
+            </div>
+            <div id="average_tax_container_US">
+                <div id="average_tax_div_US">Your Average Tax Rate Is <span id="average_tax_span_US">0</span>%</div>
+            </div>
+            <div id="marginal_tax_container_US">
+                <div id="marginal_tax_div_US">Your Marginal Tax Rate Is <span id="marginal_tax_span_US">0</span>%</div>
+            </div>
+        </div>
+        <div id="summary_container">
+            <div id="summary">You Pay £<span id="tax_difference">0</span> More Tax in the <span id="higher_tax_country">?</span></div>
+        </div>
+        <script>
+            let tax_bracket_UK = {
+                b1: {
+                    min: 0,
+                    max: 12570,
+                    rate: 0
+                },
+                b2: {
+                    min: 12571,
+                    max: 50270,
+                    rate: 20
+                },
+                b3: {
+                    min: 50271,
+                    max: 150000,
+                    rate: 40,
+                },
+                b4: {
+                    min: 150001,
+                    max: Infinity,
+                    rate: 45
+                }
+            }
+            
+            let tax_bracket_US = {
+                b1: {
+                    min: 0,
+                    max: 11000,
+                    rate: 10
+                },
+                b2: {
+                    min: 11001,
+                    max: 44725,
+                    rate: 12
+                },
+                b3: {
+                    min: 44726,
+                    max: 95375,
+                    rate: 22
+                },
+                b4: {
+                    min: 95376,
+                    max: 182100,
+                    rate: 24
+                },
+                b5: {
+                    min: 182101,
+                    max: 231250,
+                    rate: 32
+                },
+                b6: {
+                    min: 231251,
+                    max: 578125,
+                    rate: 35,
+                },
+                b7: {
+                    min: 578126,
+                    max: Infinity,
+                    rate: 37
+                }
+            }
+                
+            
+            let income_input = document.getElementById("income_input");
+            
+            let tax_span_UK = document.getElementById("tax_span_UK");
+            let average_tax_UK = document.getElementById("average_tax_span_UK");
+            let marginal_tax_UK = document.getElementById("marginal_tax_span_UK")
+            
+            let tax_span_US = document.getElementById("tax_span_US");
+            let average_tax_US = document.getElementById("average_tax_span_US");
+            let marginal_tax_US = document.getElementById("marginal_tax_span_US")
+            
+            let tax_difference = document.getElementById("tax_difference");
+            let highest_tax_country = document.getElementById("higher_tax_country");
+            
+            function CalculateTax() {
+                let income = income_input.value;
+                let tax = 0;
+                let tax_brackets = [tax_bracket_UK, tax_bracket_US];
+                
+                let UK_tax, US_tax;
+                let UK_marginal, US_marginal;
+                
+                for (let i = 0 ; i < 2 ; i++) {
+                    tax = 0;
+                    let tax_bracket_keys = Object.keys(tax_brackets[i]);
+                    for (let j = 0 ; j < tax_bracket_keys.length ; j++) {
+                        if (income > tax_brackets[i][tax_bracket_keys[j]].max) {
+                            let band_size = tax_brackets[i][tax_bracket_keys[j]].max - tax_brackets[i][tax_bracket_keys[j]].min;
+                            tax +=  band_size * (tax_brackets[i][tax_bracket_keys[j]].rate / 100);
+                        } else {
+                            let band_remaining = income - tax_brackets[i][tax_bracket_keys[j]].min;
+                            tax += band_remaining * (tax_brackets[i][tax_bracket_keys[j]].rate / 100);
+                            
+                            if (i == 0) {
+                                UK_marginal = tax_brackets[i][tax_bracket_keys[j]].rate;
+                            } else {
+                                US_marginal = tax_brackets[i][tax_bracket_keys[j]].rate;
+                            }
+                            break;
+                        }
+                    }
+                    if (i == 0) {
+                        tax_span_UK.innerHTML = NeatenResult(tax);
+                        UK_tax = tax;
+                        average_tax_UK.innerHTML = Percentage(UK_tax, income);
+                        marginal_tax_UK.innerHTML = UK_marginal;
+                    } else {
+                        tax_span_US.innerHTML = NeatenResult(tax);
+                        US_tax = tax;
+                        average_tax_US.innerHTML = Percentage(US_tax, income);
+                        marginal_tax_US.innerHTML = US_marginal;
+                    }
+                }
+                let difference = NeatenResult(Math.abs(UK_tax - US_tax));
+                
+                highest_tax_country.innerHTML = UK_tax > US_tax ? "UK" : "US";
+                tax_difference.innerHTML = difference;
+            }
+            
+            function NeatenResult(number) {
+                number = Math.round(number * 100) / 100;
+                number = number.toFixed(2);
+                number = number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                return number;
+            }
+            
+            function Percentage(tax, income) {
+                return ((tax / income) * 100).toFixed(2);
+            }
+        </script>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
