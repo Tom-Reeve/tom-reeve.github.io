@@ -1,0 +1,108 @@
+#full-page-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+table, th, td {
+    outline: 1px solid;
+}
+tr {
+    height: 32px;
+}
+#production-table-wrapper {
+    width: 100%;
+    height: 25%;
+    overflow: scroll;
+}
+#production-table {
+    text-align: center;
+    table-layout: fixed;
+    overflow: auto;
+}
+#production-table-button-container {
+    outline: 1px solid;
+    
+    width:  100%;
+    height: 5%;
+}
+.production-table-button {
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+.production-table-project-name {
+    width: 75%;
+}
+.production-table-input {
+    width: 50%;
+    text-align: center;
+}
+.production-table-column-header {
+    width: 150px;
+}
+.production-table-project-name {
+    font-weight: bold;
+    text-align: center;
+}
+.row-header-input-production-data, .row-header-input-cost-pool {
+    width: 90%;
+}
+#cost-pool-table-wrapper {
+    width: 100%;
+    height: 25%;
+    overflow: scroll;
+}
+#cost-pool-table {
+    text-align: center;
+    table-layout: fixed;
+    overflow: auto;
+    width: 100%;
+}
+#cost-pool-table-button-container {
+    outline: 1px solid;
+    
+    width: 100%;
+    height: 5%;
+}
+.cost-pool-table-button {
+    width: 20%;
+    height: 100%;
+    float: left;
+}
+.annual-cost {
+    width: 75%;
+}
+#answer-table-wrapper {
+    width: 100%;
+    height: 20%;
+    overflow: scroll;
+}
+#answer-table {
+    outline: 1px solid;
+    
+    width: 100%;
+    text-align: center;
+    table-layout: fixed;
+    overflow: auto;
+}
+.OAR-answer {
+    width: 100%;
+    height: 2%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
